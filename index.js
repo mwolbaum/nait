@@ -1,0 +1,112 @@
+const nodemailer = require('nodemailer')
+const express = require('express')
+const bodyParser = require('body-parser')
+const app = express()
+app.use(bodyParser.json())
+app.set('port', (process.env.PORT || 5000))
+
+//const REQUIRE_AUTH = false
+//const AUTH_TOKEN = 'an-example-token'
+
+app.get('/', function (req, res) {
+  res.send('Use the /webhook endpoint.')
+})
+app.get('/webhook', function (req, res) {
+  res.send('You must POST your request')
+})
+
+app.post('/webhook', function (req, res) {
+  // we expect to receive JSON data from api.ai here.
+  // the payload is stored on req.body
+  console.log(req.body)
+
+  // we have a simple authentication
+ // if (REQUIRE_AUTH) {
+  //  if (req.headers['auth-token'] !== AUTH_TOKEN) {
+ //     return res.status(401).send('Unauthorized')
+ //   }
+ // }
+
+  // and some validation too
+  if (!req.body || !req.body.result || !req.body.result.parameters) {
+    return res.status(400).send('Bad Request')
+  }
+
+  // the value of Action from api.ai is stored in req.body.result.action
+  console.log('* Received action -- %s', req.body.result.action)
+
+  // parameters are stored in req.body.result.parameters
+  var userName = req.body.result.parameters['name']
+  var email = ""
+
+  //This section should instead retrieve emails from a database
+  switch(userName) {
+    case "Matt":
+        email = "mattwolbaum@yahoo.com"
+        break;
+    case "Anh":
+        email = "anhn9393@gmail.com"
+        break;
+    case "Adrian":
+        email = "comiseladrian@gmail.com"
+        break;
+    case "Ayesha":
+        email = "ayesha.srana@gmail.com"
+        break;
+
+    default:
+    email = ""
+    break;
+}
+
+
+ // var webhookReply = 'Hello ' + userName + '! Welcome from the webhook.'
+ if (email != "")
+ {
+ var webhookReply = 'Hello ' + userName + '! We are sending you an email with a link to reset your password.'
+ SendEmail();
+ }
+ else
+ {
+  var webhookReply = 'Sorry ' + userName + ' I do not recognize your name.'
+ }
+
+function SendEmail ()
+{
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'naitassistant@gmail.com',
+      pass: process.env.GMAIL_PASSWORD
+    }
+  });
+
+  var mailOptions = {
+    from: 'naitassistant@gmail.com',
+    to: email, //replace will email from user query
+    subject: 'Password Reset',
+    text: 'Hi ' + userName + ',\nPlease click this link to reset your password'
+  };
+
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+}
+
+
+  // Response sent back to Dialogflow
+  res.status(200).json({
+    source: 'webhook',
+    speech: webhookReply,
+    displayText: webhookReply
+  })
+})
+
+app.listen(app.get('port'), function () {
+  console.log('* Webhook service is listening on port:' + app.get('port'))
+})
