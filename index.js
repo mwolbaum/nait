@@ -36,7 +36,7 @@ app.post('/webhook', function (req, res) {
   console.log('* Received action -- %s', req.body.result.action)
 
   // parameters are stored in req.body.result.parameters
-  var userName = req.body.result.parameters['name']
+  var userName = req.body.result.parameters['name'] //retrieves user name from dialogflow
   var email = ""
 
   //This section should instead retrieve emails from a database
@@ -59,8 +59,6 @@ app.post('/webhook', function (req, res) {
     break;
 }
 
-
- // var webhookReply = 'Hello ' + userName + '! Welcome from the webhook.'
  if (email != "")
  {
  var webhookReply = 'Hello ' + userName + '! We are sending you an email with a link to reset your password.'
@@ -77,7 +75,7 @@ function SendEmail ()
     service: 'gmail',
     auth: {
       user: 'naitassistant@gmail.com',
-      pass: process.env.GMAIL_PASSWORD
+      pass: process.env.GMAIL_PASSWORD //Heroku config var
     }
   });
 
