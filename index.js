@@ -42,7 +42,7 @@ app.post('/webhook', function (req, res) {
   //This section should instead retrieve emails from a database
   switch(userName) {
     case "Matt":
-        email = "mattwolbaum@yahoo.com"
+        email = "mrwolbaum@gmail.com"
         break;
     case "Anh":
         email = "anhn9393@gmail.com"
