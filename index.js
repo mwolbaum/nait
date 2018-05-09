@@ -61,7 +61,7 @@ app.post('/webhook', function (req, res) {
 
  if (email != "")
  {
- var webhookReply = 'Hello ' + userName + '! We are sending you an email with a link to reset your password.'
+ var webhookReply = 'Hello ' + userName + ', I am sending a password reset link to your email: ' + email + '.'
  SendEmail();
  }
  else
