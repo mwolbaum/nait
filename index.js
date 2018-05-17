@@ -154,7 +154,9 @@ function RequestMSToken() {
         if (error) throw new Error(error);
 
         console.log(body);
-        return "successssss"
+        
     });
+
+    return "successssss"
 
 }
