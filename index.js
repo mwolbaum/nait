@@ -43,7 +43,13 @@ app.post('/webhook', function (req, res) {
     }
     else if (req.body.result.action == "passwordreset") {
 
-        var webhookReply = RequestMSToken()
+        //var webhookReply = RequestMSToken()
+
+        RequestMSToken(function (response) {
+
+            console.log("body is: " + body);
+            var webhookReply = body
+        });
 
     }
     else {
@@ -129,7 +135,7 @@ function SendEmail(email, userName) {
     });
 }
 
-function RequestMSToken() {
+function RequestMSToken(callback) {
 
     var request = require("request");
 
@@ -152,30 +158,33 @@ function RequestMSToken() {
 
     //var MSToken = "No Token"
 
-    function GetBody(options, callback) {
-        request(options, function (error, response, body) {
-            if (error) throw new Error(error);
+    // function GetBody(options, callback) {
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
 
-             console.log(body);
-             return callback(body);
-        
+        console.log(body);
+        return callback(body);
 
-        });
-    }
+
+    });
+    //}
 
     // MSToken = request.body
 
     //console.log('MSToke: ' + MSToken)
 
-    var MSToken = "blank"
+    //var MSToken = "blank"
 
-    GetBody(options, function (response) {
-     
-            console.log("body is: " + body);
-            msToken = body
-    });
 
-    return MSToken
+    
+
+   // GetBody(options, function (response) {
+
+     //   console.log("body is: " + body);
+    //    msToken = body
+   // });
+
+    //return "test" //MSToken 
 
 
 }
