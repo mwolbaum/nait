@@ -157,7 +157,7 @@ function RequestMSToken() {
         
     });
 
-    return request.response.access_token
+    return request.body.token_type
     
 
 }
