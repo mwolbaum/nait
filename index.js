@@ -157,6 +157,8 @@ function RequestMSToken() {
             if (error) throw new Error(error);
 
              console.log(body);
+             callback(null, body);
+             //callback(null, JSON.parse(body));
 
         });
     }
