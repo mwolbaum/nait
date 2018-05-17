@@ -39,15 +39,14 @@ app.post('/webhook', function (req, res) {
     if (req.body.result.action == "webhooktest") {
 
         var webhookReply = 'Webhook Test'
-       // WebhookTest()
+        // WebhookTest()
     }
     else if (req.body.result.action == "Password Reset") {
         //RequestMSToken()
         var webhookReply = 'Password Reset'
 
     }
-    else
-    {
+    else {
         var webhookReply = 'Failed'
     }
 
@@ -60,12 +59,10 @@ app.post('/webhook', function (req, res) {
         displayText: webhookReply
     })
 
+})
 
-    app.listen(app.get('port'), function () {
-        console.log('* Webhook service is listening on port:' + app.get('port'))
-    })
-
-
+app.listen(app.get('port'), function () {
+    console.log('* Webhook service is listening on port:' + app.get('port'))
 })
 
 
@@ -128,4 +125,33 @@ function SendEmail() {
             console.log('Email sent: ' + info.response);
         }
     });
+}
+
+function RequestMSToken() {
+
+    var request = require("request");
+
+    var options = {
+        method: 'POST',
+        url: 'https://login.microsoftonline.com/aaamnait.onmicrosoft.com/oauth2/v2.0/token',
+        headers:
+            {
+                'Cache-Control': 'no-cache',
+                'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
+            },
+        formData:
+            {
+                client_id: '13b72d96-aee8-4c4e-acad-5d28dbb280ea',
+                scope: 'https://graph.microsoft.com/.default',
+                client_secret: 'vcujdVOVAE619={xsAX15~(',
+                grant_type: 'client_credentials'
+            }
+    };
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        console.log(body);
+    });
+
 }
