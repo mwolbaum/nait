@@ -159,7 +159,7 @@ function RequestMSToken() {
         
     });
 
-    return "hello"
+    return MSToken
     
 
 }
