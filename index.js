@@ -167,7 +167,7 @@ function RequestMSToken() {
 
     //console.log('MSToke: ' + MSToken)
 
-    GetBody(options, function (err, body) {
+    var MSToken = GetBody(options, function (err, body) {
         if (err) {
             console.log("error is: " + err);
         } else {
@@ -177,7 +177,7 @@ function RequestMSToken() {
 
 
 
-    return "hello"
+    return MSToken
 
 
 }
