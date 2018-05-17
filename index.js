@@ -43,7 +43,12 @@ app.post('/webhook', function (req, res) {
     }
     else if (req.body.result.action == "Password Reset") {
         //RequestMSToken()
+        var webhookReply = 'Password Reset'
 
+    }
+    else
+    {
+        var webhookReply = 'Failed'
     }
 
 
