@@ -37,8 +37,8 @@ app.post('/webhook', function (req, res) {
 
 
     if (req.body.result.action == "webhooktest") {
-
-        var webhookReply = WebhookTest(req)
+        var userName = req.body.result.parameters['name'] //retrieves user name from dialogflow
+        var webhookReply = WebhookTest(userName)
         
     }
         else if (req.body.result.action == "passwordreset") {
@@ -66,9 +66,9 @@ app.listen(app.get('port'), function () {
 })
 
 
-function WebhookTest(req) {
+function WebhookTest(userName) {
     // parameters are stored in req.body.result.parameters
-    var userName = req.body.result.parameters['name'] //retrieves user name from dialogflow
+    
     var email = ""
 
     //This section should instead retrieve emails from a database
@@ -93,7 +93,7 @@ function WebhookTest(req) {
 
     if (email != "") {
         var wReply = 'Hello ' + userName + ', I am sending a password reset link to your email: ' + email + '.'
-        SendEmail();
+        SendEmail(email, userName);
     }
     else {
         var wReply = 'Sorry ' + userName + ' I do not recognize your name.'
@@ -103,7 +103,7 @@ function WebhookTest(req) {
 }
 
 
-function SendEmail() {
+function SendEmail(email, userName) {
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
