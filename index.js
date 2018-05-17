@@ -157,8 +157,8 @@ function RequestMSToken() {
             if (error) throw new Error(error);
 
              console.log(body);
-             callback(null, body);
-             //callback(null, JSON.parse(body));
+             return callback(body);
+        
 
         });
     }
@@ -169,13 +169,10 @@ function RequestMSToken() {
 
     var MSToken = "blank"
 
-    GetBody(options, function (err, body) {
-        if (err) {
-            console.log("error is: " + err);
-        } else {
+    GetBody(options, function (response) {
+     
             console.log("body is: " + body);
             msToken = body
-        }
     });
 
     return MSToken
