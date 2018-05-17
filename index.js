@@ -167,15 +167,16 @@ function RequestMSToken() {
 
     //console.log('MSToke: ' + MSToken)
 
-    var MSToken = GetBody(options, function (err, body) {
+    var MSToken = "blank"
+
+    GetBody(options, function (err, body) {
         if (err) {
             console.log("error is: " + err);
         } else {
             console.log("body is: " + body);
+            msToken = body
         }
     });
-
-
 
     return MSToken
 
