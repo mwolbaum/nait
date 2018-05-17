@@ -39,11 +39,11 @@ app.post('/webhook', function (req, res) {
     if (req.body.result.action == "webhooktest") {
 
         var webhookReply = 'Webhook Test'
-        // WebhookTest()
+        WebhookTest()
     }
         else if (req.body.result.action == "passwordreset") {
-        //RequestMSToken()
-        var webhookReply = 'Password Reset'
+        RequestMSToken()
+        var webhookReply = 'Function Call OK'
 
     }
     else {
