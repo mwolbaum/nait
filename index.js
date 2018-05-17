@@ -49,6 +49,7 @@ app.post('/webhook', function (req, res) {
 
             var jsonobj = JSON.parse(response);
             console.log("Token is: " + jsonobj.access_token);
+            MSListUsers(jsonobj.access_token)
 
             
 
@@ -190,6 +191,27 @@ function RequestMSToken(callback) {
    // });
 
     //return "test" //MSToken 
+
+
+}
+
+function MSListUsers (token) {
+
+
+    var request = require("request");
+
+    var options = { method: 'GET',
+      url: 'https://graph.microsoft.com/v1.0/users/',
+      headers: 
+       { 'Cache-Control': 'no-cache',
+         Authorization: 'Bearer ' + token } };
+    
+    request(options, function (error, response, body) {
+      if (error) throw new Error(error);
+    
+      console.log(body);
+    });
+    
 
 
 }
