@@ -47,8 +47,13 @@ app.post('/webhook', function (req, res) {
 
         RequestMSToken(function (response) {
 
-            console.log("Token is: " + response.access_token);
-            var webhookReply = response.access_token
+            var jsonobj = JSON.parse(response);
+            console.log("Token is: " + jsonobj.access_token);
+
+            
+
+
+            var webhookReply = jsonobj.access_token
         });
 
     }
