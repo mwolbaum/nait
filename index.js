@@ -157,7 +157,7 @@ function RequestMSToken() {
 
         console.log(body);
 
-        MSToken = body
+        MSToken = body.token_type
 
     });
 
