@@ -47,8 +47,8 @@ app.post('/webhook', function (req, res) {
 
         RequestMSToken(function (response) {
 
-            console.log("body is: " + body);
-            var webhookReply = body
+            console.log("body is: " + respone);
+            var webhookReply = response
         });
 
     }
