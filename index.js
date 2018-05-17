@@ -150,13 +150,15 @@ function RequestMSToken() {
             }
     };
 
+    var MSToken = "No Token"
+
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         console.log(body);
 
-        var MSToken = body
-        
+        MSToken = body
+
     });
 
     return MSToken
