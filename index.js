@@ -39,10 +39,10 @@ app.post('/webhook', function (req, res) {
     if (req.body.result.action == "webhooktest") {
         var userName = req.body.result.parameters['name'] //retrieves user name from dialogflow
         var webhookReply = WebhookTest(userName)
-        
+
     }
-        else if (req.body.result.action == "passwordreset") {
-        
+    else if (req.body.result.action == "passwordreset") {
+
         var webhookReply = RequestMSToken()
 
     }
@@ -68,7 +68,7 @@ app.listen(app.get('port'), function () {
 
 function WebhookTest(userName) {
     // parameters are stored in req.body.result.parameters
-    
+
     var email = ""
 
     //This section should instead retrieve emails from a database
@@ -152,31 +152,30 @@ function RequestMSToken() {
 
     //var MSToken = "No Token"
 
-    function GetBody (options, callback) {
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
+    function GetBody(options, callback) {
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
 
-       // console.log(body);
+             console.log(body);
 
-    });
-}
+        });
+    }
 
-   // MSToken = request.body
+    // MSToken = request.body
 
     //console.log('MSToke: ' + MSToken)
-    
-    GetBody(options, function(err, body)
-{
-    if (err) {
-        console.log("error is: " + err);
-      } else {
-        console.log("body is: " + body);
-      }
+
+    GetBody(options, function (err, body) {
+        if (err) {
+            console.log("error is: " + err);
+        } else {
+            console.log("body is: " + body);
+        }
     });
 
 
-    
+
     return "hello"
-    
+
 
 }
