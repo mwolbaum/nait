@@ -152,12 +152,12 @@ function RequestMSToken() {
 
     var MSToken = "No Token"
 
-    request(options, function (error, response, body) {
+    MSToken = request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         console.log(body);
 
-        MSToken = body.token_type
+        return body
 
     });
 
