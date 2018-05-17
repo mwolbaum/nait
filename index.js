@@ -154,10 +154,12 @@ function RequestMSToken() {
         if (error) throw new Error(error);
 
         console.log(body);
+
+        var MSToken = request.response
         
     });
 
-    return request.body.token_type
+    return "hello"
     
 
 }
