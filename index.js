@@ -38,11 +38,11 @@ app.post('/webhook', function (req, res) {
 
     if (req.body.result.action == "webhooktest") {
 
-        var webhookReply = 'Webhook Test'
-        WebhookTest()
+        var webhookReply = WebhookTest(req)
+        
     }
         else if (req.body.result.action == "passwordreset") {
-        RequestMSToken()
+        //RequestMSToken()
         var webhookReply = 'Function Call OK'
 
     }
@@ -66,7 +66,7 @@ app.listen(app.get('port'), function () {
 })
 
 
-function WebhookTest() {
+function WebhookTest(req) {
     // parameters are stored in req.body.result.parameters
     var userName = req.body.result.parameters['name'] //retrieves user name from dialogflow
     var email = ""
@@ -92,12 +92,14 @@ function WebhookTest() {
     }
 
     if (email != "") {
-        var webhookReply = 'Hello ' + userName + ', I am sending a password reset link to your email: ' + email + '.'
+        var wReply = 'Hello ' + userName + ', I am sending a password reset link to your email: ' + email + '.'
         SendEmail();
     }
     else {
-        var webhookReply = 'Sorry ' + userName + ' I do not recognize your name.'
+        var wReply = 'Sorry ' + userName + ' I do not recognize your name.'
     }
+
+    return wReply
 }
 
 
