@@ -150,19 +150,33 @@ function RequestMSToken() {
             }
     };
 
-    var MSToken = "No Token"
+    //var MSToken = "No Token"
 
+    function GetBody (options, callback) {
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
-        console.log(body);
+       // console.log(body);
 
     });
+}
 
-    MSToken = request.body
+   // MSToken = request.body
 
-    console.log('MSToke: ' + MSToken)
-    return MSToken
+    //console.log('MSToke: ' + MSToken)
+    
+    GetBody(options, function(err, body)
+{
+    if (err) {
+        console.log("error is: " + err);
+      } else {
+        console.log("body is: " + body);
+      }
+    });
+
+
+    
+    return "hello"
     
 
 }
