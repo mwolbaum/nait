@@ -161,6 +161,7 @@ function RequestMSToken() {
 
     MSToken = request.body
 
+    console.log('MSToke: ' + MSToken)
     return MSToken
     
 
