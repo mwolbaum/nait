@@ -129,36 +129,3 @@ function SendEmail() {
         }
     });
 }
-
-
-function RequestMSToken() {
-
-    var request = require("request");
-
-    var options = {
-        method: 'POST',
-        url: 'https://login.microsoftonline.com/aaamnait.onmicrosoft.com/oauth2/v2.0/token',
-        headers:
-            {
-                'Cache-Control': 'no-cache',
-                'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
-            },
-        formData:
-            {
-                client_id: '13b72d96-aee8-4c4e-acad-5d28dbb280ea',
-                scope: 'https://graph.microsoft.com/.default',
-                client_secret: 'vcujdVOVAE619={xsAX15~(',
-                grant_type: 'client_credentials'
-            }
-    };
-
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
-    });
-
-}
-
-
-
