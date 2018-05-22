@@ -28,6 +28,8 @@ app.post('/webhook', function (req, res) {
     // }
 
     // and some validation too
+
+    var webhookReply = "not ready"
     if (!req.body || !req.body.result || !req.body.result.parameters) {
         return res.status(400).send('Bad Request')
     }
@@ -38,7 +40,7 @@ app.post('/webhook', function (req, res) {
 
     if (req.body.result.action == "webhooktest") {
         var userName = req.body.result.parameters['name'] //retrieves user name from dialogflow
-        var webhookReply = WebhookTest(userName)
+        webhookReply = WebhookTest(userName)
 
     }
     else if (req.body.result.action == "passwordreset") {
@@ -54,12 +56,12 @@ app.post('/webhook', function (req, res) {
             
 
 
-            var webhookReply = jsonobj.access_token
+            webhookReply = jsonobj.access_token // When this runs jsonobj.access_token is undefined...
         });
 
     }
     else {
-        var webhookReply = 'Failed'
+        webhookReply = 'Failed'
     }
 
 
