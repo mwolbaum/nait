@@ -42,6 +42,12 @@ app.post('/webhook', function (req, res) {
         var userName = req.body.result.parameters['name'] //retrieves user name from dialogflow
         webhookReply = WebhookTest(userName)
 
+        res.status(200).json({
+            source: 'webhook',
+            speech: webhookReply,
+            displayText: webhookReply
+        })
+
     }
     else if (req.body.result.action == "passwordreset") {
 
@@ -57,14 +63,17 @@ app.post('/webhook', function (req, res) {
 
 
             webhookReply = jsonobj.access_token // When this runs jsonobj.access_token is undefined...
+
+            res.status(200).json({
+                source: 'webhook',
+                speech: webhookReply,
+                displayText: webhookReply
+            })
         });
 
     }
     else {
         webhookReply = 'Failed'
-    }
-
-
 
     // Response sent back to Dialogflow
     res.status(200).json({
@@ -72,6 +81,16 @@ app.post('/webhook', function (req, res) {
         speech: webhookReply,
         displayText: webhookReply
     })
+    }
+
+
+
+    // Response sent back to Dialogflow
+   // res.status(200).json({
+      //  source: 'webhook',
+       // speech: webhookReply,
+       // displayText: webhookReply
+    //})
 
 })
 
