@@ -65,10 +65,24 @@ app.post('/webhook', function (req, res) {
             // MSListUsers(jsonobj.access_token)
             MSResetPassword(jsonobj.access_token, username, function (newpass) {
 
-                var isJSON = require('is-json');
+               // var isJSON = require('is-json');
 
-                console.log('result JSON? ' + isJSON(newpass)); // true
-                webhookReply = 'Your new password is ' + newpass
+                //console.log('result JSON? ' + isJSON(newpass)); // true
+
+                if (newpass.length > 10) //shitty way of detecting errors
+                {
+                    var jsonerror = JSON.parse(newpass)
+
+                    webhookReply = 'Sorry there was an error/n' + jsonerror.error
+                }
+                else
+                {
+                    webhookReply = 'Your new password is ' + newpass
+                
+                }
+
+                console.log(webhookReply)
+                
 
                 res.status(200).json({
                     source: 'webhook',
@@ -263,7 +277,7 @@ function MSResetPassword(token, username, callback) {
         strict: true
     });
 
-    console.log('Random Password = ' + randpass); 
+    console.log('Random Password = ' + randpass);
 
     var options = {
         method: 'PATCH',
