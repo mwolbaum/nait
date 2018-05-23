@@ -78,7 +78,7 @@ app.post('/webhook', function (req, res) {
                 {
                    // var jsonerror = JSON.parse(newpass)
 
-                    webhookReply = 'Sorry there was an error/n' + newpass.error
+                   webhookReply = 'Sorry there was an error\n' + newpass
                 
                 }
 
