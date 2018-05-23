@@ -57,12 +57,15 @@ app.post('/webhook', function (req, res) {
 
             var jsonobj = JSON.parse(response);
             console.log("Token is: " + jsonobj.access_token);
-            MSListUsers(jsonobj.access_token)
+           // MSListUsers(jsonobj.access_token)
+           MSResetPassword(jsonobj.access_token, "TestUser")
 
-            
 
 
-            webhookReply = jsonobj.access_token // When this runs jsonobj.access_token is undefined...
+
+
+
+            webhookReply = jsonobj.access_token
 
             res.status(200).json({
                 source: 'webhook',
@@ -75,21 +78,21 @@ app.post('/webhook', function (req, res) {
     else {
         webhookReply = 'Failed'
 
-    // Response sent back to Dialogflow
-    res.status(200).json({
-        source: 'webhook',
-        speech: webhookReply,
-        displayText: webhookReply
-    })
+        // Response sent back to Dialogflow
+        res.status(200).json({
+            source: 'webhook',
+            speech: webhookReply,
+            displayText: webhookReply
+        })
     }
 
 
 
     // Response sent back to Dialogflow
-   // res.status(200).json({
-      //  source: 'webhook',
-       // speech: webhookReply,
-       // displayText: webhookReply
+    // res.status(200).json({
+    //  source: 'webhook',
+    // speech: webhookReply,
+    // displayText: webhookReply
     //})
 
 })
@@ -203,36 +206,66 @@ function RequestMSToken(callback) {
     //var MSToken = "blank"
 
 
-    
 
-   // GetBody(options, function (response) {
 
-     //   console.log("body is: " + body);
+    // GetBody(options, function (response) {
+
+    //   console.log("body is: " + body);
     //    msToken = body
-   // });
+    // });
 
     //return "test" //MSToken 
 
 
 }
 
-function MSListUsers (token) {
+function MSListUsers(token) {
 
 
     var request = require("request");
 
-    var options = { method: 'GET',
-      url: 'https://graph.microsoft.com/v1.0/users/',
-      headers: 
-       { 'Cache-Control': 'no-cache',
-         Authorization: 'Bearer ' + token } };
-    
+    var options = {
+        method: 'GET',
+        url: 'https://graph.microsoft.com/v1.0/users/',
+        headers:
+            {
+                'Cache-Control': 'no-cache',
+                Authorization: 'Bearer ' + token
+            }
+    };
+
     request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-    
-      console.log(body);
+        if (error) throw new Error(error);
+
+        console.log(body);
     });
-    
+
+
+
+}
+
+function MSResetPassword(token, username) {
+
+    var request = require("request")
+
+    var options = {
+        method: 'PATCH',
+        url: 'https://graph.microsoft.com/v1.0/users/' + username + '@aaamnait.onmicrosoft.com',
+        headers:
+            {
+                'Cache-Control': 'no-cache',
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+        body: { passwordProfile: { forceChangePasswordNextSignIn: false, password: '12349118' } },
+        json: true
+    };
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        console.log(body);
+    });
 
 
 }
