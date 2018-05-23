@@ -249,7 +249,7 @@ function MSResetPassword(token, username) {
     var request = require("request")
     var randomize = require('generate-password');
  
-var randpass = randomize.generate({
+    var randpass = randomize.generate({
     length: 10,
     numbers: true
 });
