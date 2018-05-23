@@ -281,7 +281,7 @@ function MSResetPassword(token, username, callback) {
         if(jsonobj.error)
         {
             console.log('Error resetting password: ' + jsonobj.error);
-            return callback(jsonobj.error)
+            return callback("error")
 
         }
 
