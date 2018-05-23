@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer')
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
+var isString = require('is-string')
 app.use(bodyParser.json())
 app.set('port', (process.env.PORT || 5000))
 
