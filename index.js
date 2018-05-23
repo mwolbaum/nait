@@ -247,6 +247,14 @@ function MSListUsers(token) {
 function MSResetPassword(token, username) {
 
     var request = require("request")
+    var randomize = require('generate-password');
+ 
+var randpass = randomize.generate({
+    length: 10,
+    numbers: true
+});
+ 
+console.log('Random Password = ' + randpass);
 
     var options = {
         method: 'PATCH',
@@ -257,7 +265,7 @@ function MSResetPassword(token, username) {
                 Authorization: 'Bearer ' + token,
                 'Content-Type': 'application/json'
             },
-        body: { passwordProfile: { forceChangePasswordNextSignIn: false, password: '12349118' } },
+        body: { passwordProfile: { forceChangePasswordNextSignIn: false, password: randpass } },
         json: true
     };
 
