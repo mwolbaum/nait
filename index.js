@@ -53,12 +53,17 @@ app.post('/webhook', function (req, res) {
 
         //var webhookReply = RequestMSToken()
 
+        var username = req.body.result.parameters['name'] //retrieves user name from dialogflow
+        var phonenum = req.body.result.parameters['phone'] //retrieves phone number from dialogflow (not yet implemented)
+
+
+
         RequestMSToken(function (response) {
 
             var jsonobj = JSON.parse(response);
             console.log("Token is: " + jsonobj.access_token);
             // MSListUsers(jsonobj.access_token)
-            MSResetPassword(jsonobj.access_token, "TestUser", function (newpass) {
+            MSResetPassword(jsonobj.access_token, username, function (newpass) {
                 webhookReply = 'Your new password is ' + newpass
 
                 res.status(200).json({
