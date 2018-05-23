@@ -69,7 +69,7 @@ app.post('/webhook', function (req, res) {
 
                 //console.log('result JSON? ' + isJSON(newpass)); // true
 
-                if (isString(newpass)) 
+                if (isString(newpass)) //if no error
                 {
                     webhookReply = 'Your new password is ' + newpass
                 }
