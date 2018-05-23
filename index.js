@@ -277,11 +277,11 @@ function MSResetPassword(token, username, callback) {
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
-        var jsonobj = JSON.parse(body);
-        if(jsonobj.error)
+        //var jsonobj = JSON.parse(body);
+        if(body.error)
         {
-            console.log('Error resetting password: ' + jsonobj.error);
-            return callback("error")
+            console.log('Error resetting password: ' + body.error);
+            return callback(body.error)
 
         }
 
