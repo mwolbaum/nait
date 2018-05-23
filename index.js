@@ -1,3 +1,5 @@
+import { isString } from 'util';
+
 const nodemailer = require('nodemailer')
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -69,15 +71,15 @@ app.post('/webhook', function (req, res) {
 
                 //console.log('result JSON? ' + isJSON(newpass)); // true
 
-                if (newpass.length > 10) //shitty way of detecting errors
+                if (isString(newpass)) 
+                {
+                    webhookReply = 'Your new password is ' + newpass
+                }
+                else //If no string returned then it is a JSON object with error message
                 {
                     var jsonerror = JSON.parse(newpass)
 
                     webhookReply = 'Sorry there was an error/n' + jsonerror.error
-                }
-                else
-                {
-                    webhookReply = 'Your new password is ' + newpass
                 
                 }
 
