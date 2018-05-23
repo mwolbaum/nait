@@ -57,20 +57,18 @@ app.post('/webhook', function (req, res) {
 
             var jsonobj = JSON.parse(response);
             console.log("Token is: " + jsonobj.access_token);
-           // MSListUsers(jsonobj.access_token)
-           MSResetPassword(jsonobj.access_token, "TestUser")
+            // MSListUsers(jsonobj.access_token)
+            MSResetPassword(jsonobj.access_token, "TestUser", function (newpass) {
+                webhookReply = 'Your new password is ' + newpass
+
+                res.status(200).json({
+                    source: 'webhook',
+                    speech: webhookReply,
+                    displayText: webhookReply
+                })
 
 
 
-
-
-
-            webhookReply = jsonobj.access_token
-
-            res.status(200).json({
-                source: 'webhook',
-                speech: webhookReply,
-                displayText: webhookReply
             })
         });
 
@@ -238,24 +236,25 @@ function MSListUsers(token) {
         if (error) throw new Error(error);
 
         console.log(body);
+
     });
 
 
 
 }
 
-function MSResetPassword(token, username) {
+function MSResetPassword(token, username, callback) {
 
     var request = require("request")
     var randomize = require('generate-password');
- 
+
     var randpass = randomize.generate({
-    length: 10,
-    numbers: true,
-    strict: true
-});
- 
-console.log('Random Password = ' + randpass);
+        length: 10,
+        numbers: true,
+        strict: true
+    });
+
+    console.log('Random Password = ' + randpass);
 
     var options = {
         method: 'PATCH',
@@ -274,6 +273,7 @@ console.log('Random Password = ' + randpass);
         if (error) throw new Error(error);
 
         console.log(body);
+        return callback(randpass); //need to return password if successful and error if fail
     });
 
 
