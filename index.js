@@ -76,9 +76,9 @@ app.post('/webhook', function (req, res) {
                 }
                 else //If no string returned then it is a JSON object with error message
                 {
-                    var jsonerror = JSON.parse(newpass)
+                   // var jsonerror = JSON.parse(newpass)
 
-                    webhookReply = 'Sorry there was an error/n' + jsonerror.error
+                    webhookReply = 'Sorry there was an error/n' + newpass.error
                 
                 }
 
