@@ -64,6 +64,10 @@ app.post('/webhook', function (req, res) {
             console.log("Token is: " + jsonobj.access_token);
             // MSListUsers(jsonobj.access_token)
             MSResetPassword(jsonobj.access_token, username, function (newpass) {
+
+                var isJSON = require('is-json');
+
+                console.log('result JSON? ' + isJSON(newpass)); // true
                 webhookReply = 'Your new password is ' + newpass
 
                 res.status(200).json({
