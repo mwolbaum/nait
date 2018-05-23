@@ -263,7 +263,7 @@ function MSResetPassword(token, username, callback) {
         strict: true
     });
 
-    console.log('Random Password = ' + randpass);
+    console.log('Random Password = ' + randpass); 
 
     var options = {
         method: 'PATCH',
