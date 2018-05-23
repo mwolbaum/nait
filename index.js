@@ -251,7 +251,8 @@ function MSResetPassword(token, username) {
  
     var randpass = randomize.generate({
     length: 10,
-    numbers: true
+    numbers: true,
+    strict: true
 });
  
 console.log('Random Password = ' + randpass);
