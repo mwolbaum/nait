@@ -380,7 +380,7 @@ function MSCreateUser (token, fname, lname, callback)
          'Content-Type': 'application/json' },
       body: 
        { accountEnabled: true,
-         displayName: fname + ' ' + lname,
+         displayName: fname + lname,
          mailNickname: username,
          userPrincipalName: username + '@aaamnait.onmicrosoft.com',
          passwordProfile: { forceChangePasswordNextSignIn: true, password: randpass } },
