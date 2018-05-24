@@ -54,10 +54,13 @@ app.post('/webhook', function (req, res) {
 
         //var webhookReply = RequestMSToken()
 
-        var username = req.body.result.parameters['name'] //retrieves user name from dialogflow
-        var phonenum = req.body.result.parameters['phone'] //retrieves phone number from dialogflow (not yet implemented)
+        //var username = req.body.result.parameters['name'] //retrieves user name from dialogflow
+        //var phonenum = req.body.result.parameters['phone'] //retrieves phone number from dialogflow (not yet implemented)
 
+        var fname = req.body.result.parameters['firstname'] //retrieves user name from dialogflow
+        var lname = req.body.result.parameters['lastname'] //retrieves user name from dialogflow
 
+        var username = fname.substring(0, 1) + lname
 
         RequestMSToken(function (response) {
 
