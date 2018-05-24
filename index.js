@@ -369,7 +369,7 @@ function MSCreateUser (token, fname, lname, callback)
         strict: true
     });
 
-    var username = + fname.slice(0, 1) + lname
+    var username = + (fname.slice(0, 1)) + lname
     
     var options = { method: 'POST',
       url: 'https://graph.microsoft.com/v1.0/users',
