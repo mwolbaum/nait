@@ -112,7 +112,7 @@ app.post('/webhook', function (req, res) {
         MSCreateUser(jsonobj.access_token, fname, lname, function (ADResponse) {
 
          
-                webhookReply = ADResponse
+                webhookReply = 'Created new user ' + JSON.stringify(ADResponse.userPrincipalName)
 
             console.log(webhookReply)
             
