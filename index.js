@@ -369,7 +369,7 @@ function MSCreateUser (token, fname, lname, callback)
         strict: true
     });
 
-    var username = + fname.substring(0, 1) + lname
+    var username = fname.substring(0, 1) + lname
 
     
     var options = { method: 'POST',
