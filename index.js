@@ -62,7 +62,7 @@ app.post('/webhook', function (req, res) {
         RequestMSToken(function (response) {
 
             var jsonobj = JSON.parse(response);
-            console.log("Token is: " + jsonobj.access_token);
+           // console.log("Token is: " + jsonobj.access_token);
             // MSListUsers(jsonobj.access_token)
             MSResetPassword(jsonobj.access_token, username, function (newpass) {
 
@@ -97,6 +97,44 @@ app.post('/webhook', function (req, res) {
         });
 
     }
+
+    else if (req.body.result.action == "adcreateuser") {
+
+        var fname = req.body.result.parameters['firstname'] //retrieves user name from dialogflow
+        var lname = req.body.result.parameters['lastname'] //retrieves user name from dialogflow
+
+       // var phonenum = req.body.result.parameters['phone'] //retrieves phone number from dialogflow (not yet implemented)
+
+       RequestMSToken(function (response) {
+
+        var jsonobj = JSON.parse(response);
+
+        MSCreateUser(jsonobj.access_token, fname, lname, function (ADResponse) {
+
+         
+                webhookReply = ADResponse
+
+            console.log(webhookReply)
+            
+
+            res.status(200).json({
+                source: 'webhook',
+                speech: webhookReply,
+                displayText: webhookReply
+            })
+
+
+
+        })
+    });
+
+
+
+
+
+
+    }
+
     else {
         webhookReply = 'Failed'
 
@@ -313,6 +351,47 @@ function MSResetPassword(token, username, callback) {
 
         
     });
+
+
+}
+
+function MSCreateUser (token, fname, lname, callback)
+
+{
+
+    var request = require("request");
+
+    var randomize = require('generate-password');
+
+    var randpass = randomize.generate({
+        length: 10,
+        numbers: true,
+        strict: true
+    });
+
+    var username = + fname.slice(0, 1) + lname
+    
+    var options = { method: 'POST',
+      url: 'https://graph.microsoft.com/v1.0/users',
+      headers: 
+       { 'Cache-Control': 'no-cache',
+         Authorization: 'Bearer ' + token,
+         'Content-Type': 'application/json' },
+      body: 
+       { accountEnabled: true,
+         displayName: fname + ' ' + lname,
+         mailNickname: username,
+         userPrincipalName: username + '@aaamnait.onmicrosoft.com',
+         passwordProfile: { forceChangePasswordNextSignIn: true, password: randpass } },
+      json: true };
+    
+    request(options, function (error, response, body) {
+      if (error) throw new Error(error);
+    
+      console.log(body);
+    });
+    
+
 
 
 }
