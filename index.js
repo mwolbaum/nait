@@ -79,7 +79,9 @@ app.post('/webhook', function (req, res) {
                 }
                 else //If no string returned then it is a JSON object with error message
                 {
-                   // var jsonerror = JSON.parse(newpass)
+                   //THIS ERROR OCCURS IF username DOES NOT EXIST IN ACTIVE DIRECTORY
+                    // NEED TO SUPPLY BETTER ERROR MESSAGE
+                   // GIVE THE USER THE OPTION TO TYPE USER NAME RATHER THAN SPEAK
 
                     webhookReply = 'Sorry there was an error\n\n' + JSON.stringify(newpass.error.message)
                 
@@ -118,6 +120,10 @@ app.post('/webhook', function (req, res) {
                 webhookReply = 'Created new user ' + JSON.stringify(ADResponse.userPrincipalName)
 
             console.log(webhookReply)
+
+
+            //NEED TO DO ERROR HANDLING
+            //WHAT IF USERNAME ALREADY EXISTS?
             
 
             res.status(200).json({
@@ -165,6 +171,10 @@ app.listen(app.get('port'), function () {
 })
 
 
+
+//THIS FUNCTION IS OLD. INITIAL TESTING OF SENDING EMAILS. SEEMED TO WORK PRETTY GOOD EXCEPT GMAIL WOULD OFTEN
+//REFUSE TO SEND THE EMAIL BECAUSE IT THINKS THIS APP IS UNTRUSTED
+//NEED TO CHANGE TO PROPER AUTHENTICATION (OAUTH?) FOR GMAIL TO TRUST
 function WebhookTest(userName) {
     // parameters are stored in req.body.result.parameters
 
@@ -228,6 +238,7 @@ function SendEmail(email, userName) {
     });
 }
 
+
 function RequestMSToken(callback) {
 
     var request = require("request");
@@ -242,9 +253,9 @@ function RequestMSToken(callback) {
             },
         formData:
             {
-                client_id: '13b72d96-aee8-4c4e-acad-5d28dbb280ea',
+                client_id: process.env.CLIENT_ID, //Heroku config var
                 scope: 'https://graph.microsoft.com/.default',
-                client_secret: 'vcujdVOVAE619={xsAX15~(',
+                client_secret: process.env.CLIENT_SECRET,   //Heroku config var
                 grant_type: 'client_credentials'
             }
     };
@@ -282,6 +293,8 @@ function RequestMSToken(callback) {
 
 }
 
+
+//NOT CURRENTLY USED. FOR TESTING
 function MSListUsers(token) {
 
 
