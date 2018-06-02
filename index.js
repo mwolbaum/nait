@@ -145,6 +145,7 @@ app.post('/webhook', function (req, res) {
 
         var fname = req.body.result.parameters['firstname'] //retrieves user name from dialogflow
         var lname = req.body.result.parameters['lastname'] //retrieves user name from dialogflow
+        var phone = req.body.result.parameters['phone'] 
 
        // var phonenum = req.body.result.parameters['phone'] //retrieves phone number from dialogflow (not yet implemented)
 
@@ -152,7 +153,7 @@ app.post('/webhook', function (req, res) {
 
         var jsonobj = JSON.parse(response);
 
-        MSCreateUser(jsonobj.access_token, fname, lname, function (ADResponse) {
+        MSCreateUser(jsonobj.access_token, fname, lname, phone, function (ADResponse) {
 
          
                 webhookReply = 'Created new user ' + JSON.stringify(ADResponse.userPrincipalName)
@@ -439,7 +440,7 @@ function MSGetUser(token, username, callback) {
 }
 
 
-function MSCreateUser (token, fname, lname, callback)
+function MSCreateUser (token, fname, lname, phone, callback)
 
 {
 
@@ -465,7 +466,7 @@ function MSCreateUser (token, fname, lname, callback)
       body: 
        { accountEnabled: true,
          displayName: fname + ' ' + lname,
-         mobilePhone: '+1 ' + '1234567',
+         mobilePhone: '+1 ' + phone,
          mailNickname: username,
          userPrincipalName: username + '@aaamnait.onmicrosoft.com',
          passwordProfile: { forceChangePasswordNextSignIn: true, password: randpass } },
