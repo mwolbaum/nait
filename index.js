@@ -70,10 +70,10 @@ app.post('/webhook', function (req, res) {
 
             MSGetUser(jsonobj.access_token, username, function (user) {
 
-                var userobject = JSON.parse(user);
+               // var userobject = JSON.parse(user);
 
-                var dispname = JSON.stringify(userobject.displayName)
-                console.log('Display Name: ' + dispname)
+                //var dispname = JSON.stringify(userobject.displayName)
+                console.log('body:\n' + user)
 
 
             
