@@ -83,7 +83,7 @@ app.post('/webhook', function (req, res) {
 
                 
 
-                    webhookReply = 'Sorry that user doesn\'t seem to exist'
+                    webhookReply = 'Sorry the user ' + fname + ' ' + lname + ' doesn\'t seem to exist'
 
                     console.log(webhookReply)
 
