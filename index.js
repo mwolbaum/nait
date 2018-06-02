@@ -72,7 +72,7 @@ app.post('/webhook', function (req, res) {
 
                 var userobject = JSON.parse(user);
 
-                if (user.error)
+                if (JSON.stringify(user.error.code) = "Request_ResourceNotFound")
                 {
 
                     webhookReply = 'Sorry that user doesn\'t seem to exist'
