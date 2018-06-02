@@ -67,6 +67,13 @@ app.post('/webhook', function (req, res) {
             var jsonobj = JSON.parse(response);
            // console.log("Token is: " + jsonobj.access_token);
             // MSListUsers(jsonobj.access_token)
+
+            MSGetUser(jsonobj.access_token, username, function (user) {
+
+
+            
+
+
             MSResetPassword(jsonobj.access_token, username, function (newpass) {
 
                // var isJSON = require('is-json');
@@ -99,6 +106,8 @@ app.post('/webhook', function (req, res) {
 
 
             })
+
+        })
         });
 
     }
@@ -370,6 +379,36 @@ function MSResetPassword(token, username, callback) {
 
 
 }
+
+function MSGetUser(token, username, callback) {
+
+    var request = require("request")
+    
+
+    var options = {
+        method: 'GET',
+        url: 'https://graph.microsoft.com/v1.0/users/' + username + '@aaamnait.onmicrosoft.com',
+        headers:
+            {
+                'Cache-Control': 'no-cache',
+                Authorization: 'Bearer ' + token,
+            } };
+
+
+ 
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        //var jsonobj = JSON.parse(body);
+
+            console.log('DISPLAY NAME ' + body.displayName);
+            return callback(body.displayName)
+        
+    });
+
+
+}
+
 
 function MSCreateUser (token, fname, lname, callback)
 
