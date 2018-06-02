@@ -72,7 +72,7 @@ app.post('/webhook', function (req, res) {
 
                 //userobject = JSON.parse(user);
 
-                var dispname = json.stringify(user.displayName)
+                var dispname = JSON.stringify(user.displayName)
                 console.log('Display Name: ' + dispname)
 
 
