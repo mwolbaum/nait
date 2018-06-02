@@ -75,7 +75,7 @@ app.post('/webhook', function (req, res) {
                 var dispname = JSON.stringify(userobject.displayName)
                 var phonenum = JSON.stringify(userobject.mobilePhone)
                 console.log('Display Name: ' + dispname)
-                console.log('Display Name: ' + phonenum)
+                console.log('Phone Number: ' + phonenum.substring(3, 10))
 
                 if (inputphone == phonenum)
 
