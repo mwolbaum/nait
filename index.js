@@ -74,7 +74,7 @@ app.post('/webhook', function (req, res) {
 
                 console.log('error code ' + userobject.error.code + '\n')
 
-                if (JSON.stringify(userobject.error.code) == 'Request_ResourceNotFound')
+                if (userobject.error.code == 'Request_ResourceNotFound')
                 {
 
                 
