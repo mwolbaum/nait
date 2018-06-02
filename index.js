@@ -70,6 +70,9 @@ app.post('/webhook', function (req, res) {
 
             MSGetUser(jsonobj.access_token, username, function (user) {
 
+                userobject = JSON.parse(user);
+                console.log('Display Name: ' + user.displayName)
+
 
             
 
@@ -401,8 +404,8 @@ function MSGetUser(token, username, callback) {
 
         //var jsonobj = JSON.parse(body);
 
-            console.log('DISPLAY NAME ' + body.displayName);
-            return callback(body.displayName)
+            console.log('User info:\n ' + body);
+            return callback(body)
         
     });
 
