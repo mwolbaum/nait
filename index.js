@@ -65,12 +65,14 @@ app.post('/webhook', function (req, res) {
         RequestMSToken(function (response) {
 
             var jsonobj = JSON.parse(response);
-           // console.log("Token is: " + jsonobj.access_token);
+            // console.log("Token is: " + jsonobj.access_token);
             // MSListUsers(jsonobj.access_token)
 
             MSGetUser(jsonobj.access_token, username, function (user) {
 
                 var userobject = JSON.parse(user);
+
+
 
                 var dispname = JSON.stringify(userobject.displayName)
                 var phonenum = JSON.stringify(userobject.mobilePhone)
@@ -79,34 +81,110 @@ app.post('/webhook', function (req, res) {
                 console.log('Display Name: ' + dispname)
                 console.log('Phone Number: ' + phonenum)
 
-                if (inputphone == phonenum)
-
+                if (user.error)
                 {
-            
+
+                    webhookReply = 'Sorry that user doesn\'t seem to exist'
+
+                    console.log(webhookReply)
 
 
-            MSResetPassword(jsonobj.access_token, username, function (newpass) {
+                    res.status(200).json({
+                        source: 'webhook',
+                        speech: webhookReply,
+                        displayText: webhookReply
+                    })
 
-               // var isJSON = require('is-json');
-
-                //console.log('result JSON? ' + isJSON(newpass)); // true
-
-                if (isString(newpass)) //if no error
-                {
-                    webhookReply = 'Your new password is ' + newpass
+                    
                 }
-                else //If no string returned then it is a JSON object with error message
-                {
-                   //THIS ERROR OCCURS IF username DOES NOT EXIST IN ACTIVE DIRECTORY
-                    // NEED TO SUPPLY BETTER ERROR MESSAGE
-                   // GIVE THE USER THE OPTION TO TYPE USER NAME RATHER THAN SPEAK
 
-                    webhookReply = 'Sorry there was an error\n\n' + JSON.stringify(newpass.error.message)
-                
+                else
+
+                {
+
+                if (inputphone == phonenum) {
+
+
+
+                    MSResetPassword(jsonobj.access_token, username, function (newpass) {
+
+                        // var isJSON = require('is-json');
+
+                        //console.log('result JSON? ' + isJSON(newpass)); // true
+
+                        if (isString(newpass)) //if no error
+                        {
+                            webhookReply = 'Your new password is ' + newpass
+                        }
+                        else //If no string returned then it is a JSON object with error message
+                        {
+                            //THIS ERROR OCCURS IF username DOES NOT EXIST IN ACTIVE DIRECTORY
+                            // NEED TO SUPPLY BETTER ERROR MESSAGE
+                            // GIVE THE USER THE OPTION TO TYPE USER NAME RATHER THAN SPEAK
+
+                            webhookReply = 'Sorry there was an error\n\n' + JSON.stringify(newpass.error.message)
+
+                        }
+
+                        console.log(webhookReply)
+
+
+                        res.status(200).json({
+                            source: 'webhook',
+                            speech: webhookReply,
+                            displayText: webhookReply
+                        })
+
+
+
+                    })
+
                 }
+                else {
+
+                    webhookReply = 'Sorry the phone number does not match'
+
+                    console.log(webhookReply)
+
+
+                    res.status(200).json({
+                        source: 'webhook',
+                        speech: webhookReply,
+                        displayText: webhookReply
+                    })
+
+                }
+
+            }
+
+            })
+        });
+
+    }
+
+    else if (req.body.result.action == "adcreateuser") {
+
+        var fname = req.body.result.parameters['firstname'] //retrieves user name from dialogflow
+        var lname = req.body.result.parameters['lastname'] //retrieves user name from dialogflow
+        var phone = req.body.result.parameters['phone']
+
+        // var phonenum = req.body.result.parameters['phone'] //retrieves phone number from dialogflow (not yet implemented)
+
+        RequestMSToken(function (response) {
+
+            var jsonobj = JSON.parse(response);
+
+            MSCreateUser(jsonobj.access_token, fname, lname, phone, function (ADResponse) {
+
+
+                webhookReply = 'Created new user ' + JSON.stringify(ADResponse.userPrincipalName)
 
                 console.log(webhookReply)
-                
+
+
+                //NEED TO DO ERROR HANDLING
+                //WHAT IF USERNAME ALREADY EXISTS?
+
 
                 res.status(200).json({
                     source: 'webhook',
@@ -117,64 +195,7 @@ app.post('/webhook', function (req, res) {
 
 
             })
-
-        }
-        else
-
-        {
-
-            webhookReply = 'Sorry the phone number does not match'
-
-            console.log(webhookReply)
-                
-
-            res.status(200).json({
-                source: 'webhook',
-                speech: webhookReply,
-                displayText: webhookReply
-            })
-
-        }
-
-        })
         });
-
-    }
-
-    else if (req.body.result.action == "adcreateuser") {
-
-        var fname = req.body.result.parameters['firstname'] //retrieves user name from dialogflow
-        var lname = req.body.result.parameters['lastname'] //retrieves user name from dialogflow
-        var phone = req.body.result.parameters['phone'] 
-
-       // var phonenum = req.body.result.parameters['phone'] //retrieves phone number from dialogflow (not yet implemented)
-
-       RequestMSToken(function (response) {
-
-        var jsonobj = JSON.parse(response);
-
-        MSCreateUser(jsonobj.access_token, fname, lname, phone, function (ADResponse) {
-
-         
-                webhookReply = 'Created new user ' + JSON.stringify(ADResponse.userPrincipalName)
-
-            console.log(webhookReply)
-
-
-            //NEED TO DO ERROR HANDLING
-            //WHAT IF USERNAME ALREADY EXISTS?
-            
-
-            res.status(200).json({
-                source: 'webhook',
-                speech: webhookReply,
-                displayText: webhookReply
-            })
-
-
-
-        })
-    });
 
 
 
@@ -390,21 +411,19 @@ function MSResetPassword(token, username, callback) {
         if (error) throw new Error(error);
 
         //var jsonobj = JSON.parse(body);
-        if(body)
-        {
+        if (body) {
             console.log(body);
             return callback(body)
 
         }
 
-        else
-        {
+        else {
             console.log(JSON.stringify(body));
             return callback(randpass); //need to return password if successful and error if fail
         }
-        
 
-        
+
+
     });
 
 
@@ -413,7 +432,7 @@ function MSResetPassword(token, username, callback) {
 function MSGetUser(token, username, callback) {
 
     var request = require("request")
-    
+
 
     var options = {
         method: 'GET',
@@ -422,27 +441,26 @@ function MSGetUser(token, username, callback) {
             {
                 'Cache-Control': 'no-cache',
                 Authorization: 'Bearer ' + token,
-            } };
+            }
+    };
 
 
- 
+
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
         //var jsonobj = JSON.parse(body);
 
-            console.log('User info:\n ' + body);
-            return callback(body)
-        
+        console.log('User info:\n ' + body);
+        return callback(body)
+
     });
 
 
 }
 
 
-function MSCreateUser (token, fname, lname, phone, callback)
-
-{
+function MSCreateUser(token, fname, lname, phone, callback) {
 
     var request = require("request");
 
@@ -456,29 +474,35 @@ function MSCreateUser (token, fname, lname, phone, callback)
 
     var username = fname.substring(0, 1) + lname
 
-    
-    var options = { method: 'POST',
-      url: 'https://graph.microsoft.com/v1.0/users',
-      headers: 
-       { 'Cache-Control': 'no-cache',
-         Authorization: 'Bearer ' + token,
-         'Content-Type': 'application/json' },
-      body: 
-       { accountEnabled: true,
-         displayName: fname + ' ' + lname,
-         mobilePhone: '+1 ' + phone,
-         mailNickname: username,
-         userPrincipalName: username + '@aaamnait.onmicrosoft.com',
-         passwordProfile: { forceChangePasswordNextSignIn: true, password: randpass } },
-      json: true };
-    
+
+    var options = {
+        method: 'POST',
+        url: 'https://graph.microsoft.com/v1.0/users',
+        headers:
+            {
+                'Cache-Control': 'no-cache',
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+        body:
+            {
+                accountEnabled: true,
+                displayName: fname + ' ' + lname,
+                mobilePhone: '+1 ' + phone,
+                mailNickname: username,
+                userPrincipalName: username + '@aaamnait.onmicrosoft.com',
+                passwordProfile: { forceChangePasswordNextSignIn: true, password: randpass }
+            },
+        json: true
+    };
+
     request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-    
-      console.log(body);
-      return callback(body);
+        if (error) throw new Error(error);
+
+        console.log(body);
+        return callback(body);
     });
-    
+
 
 
 
