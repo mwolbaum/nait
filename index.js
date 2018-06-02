@@ -55,7 +55,7 @@ app.post('/webhook', function (req, res) {
         //var webhookReply = RequestMSToken()
 
         //var username = req.body.result.parameters['name'] //retrieves user name from dialogflow
-        //var phonenum = req.body.result.parameters['phone'] //retrieves phone number from dialogflow (not yet implemented)
+        var inputphone = req.body.result.parameters['phone'] //retrieves phone number from dialogflow (not yet implemented)
 
         var fname = req.body.result.parameters['firstname'] //retrieves user name from dialogflow
         var lname = req.body.result.parameters['lastname'] //retrieves user name from dialogflow
@@ -70,12 +70,16 @@ app.post('/webhook', function (req, res) {
 
             MSGetUser(jsonobj.access_token, username, function (user) {
 
-               // var userobject = JSON.parse(user);
+                var userobject = JSON.parse(user);
 
-                //var dispname = JSON.stringify(userobject.displayName)
-                console.log('body:\n' + user)
+                var dispname = JSON.stringify(userobject.displayName)
+                var phonenum = JSON.stringify(userobject.mobilePhone)
+                console.log('Display Name: ' + dispname)
+                console.log('Display Name: ' + phonenum)
 
+                if (inputphone == phonenum)
 
+                {
             
 
 
@@ -111,6 +115,24 @@ app.post('/webhook', function (req, res) {
 
 
             })
+
+        }
+        else
+
+        {
+
+            webhookReply = 'Sorry the phone number does not match'
+
+            console.log(webhookReply)
+                
+
+            res.status(200).json({
+                source: 'webhook',
+                speech: webhookReply,
+                displayText: webhookReply
+            })
+
+        }
 
         })
         });
@@ -374,7 +396,7 @@ function MSResetPassword(token, username, callback) {
 
         else
         {
-            console.log(body);
+            console.log(JSON.stringify(body));
             return callback(randpass); //need to return password if successful and error if fail
         }
         
