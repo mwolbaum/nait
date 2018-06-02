@@ -465,6 +465,7 @@ function MSCreateUser (token, fname, lname, callback)
       body: 
        { accountEnabled: true,
          displayName: fname + ' ' + lname,
+         mobilePhone: '+1 ' + '1234567',
          mailNickname: username,
          userPrincipalName: username + '@aaamnait.onmicrosoft.com',
          passwordProfile: { forceChangePasswordNextSignIn: true, password: randpass } },
